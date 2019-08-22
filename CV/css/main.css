@@ -392,7 +392,7 @@
 }
 
 .info ul.info-list li .inf{
-	width:35%;
+	width:26%;
 	background:#ffffff;
 	left: -1px;
   position: relative;
@@ -401,7 +401,7 @@
 }
 
 .info ul.info-list li .value{
-	width:63%;
+	width:72%;
 	color:#666666;
 }
 
