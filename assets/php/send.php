@@ -1,90 +1,30 @@
+
+
 <?php
+    $name = $_REQUEST['user-name'];
+    $email = $_REQUEST['user-email'];
+    $message = ( $_REQUEST['user-message'] ) ? $_REQUEST['user-message'] : '';
+    $status = $_REQUEST['user-status'];
 
-require 'PHPMailer/PHPMailerAutoload.php';
-$mail = new PHPMailer;
-$user = 'noreplyhrptlintasmediatama@gmail.com'; 
+    $to = 'korodarmo@gmail.com';
+    $message = 'Name: '.$name.'<br /> Email: '.$email.'<br />Message: '.$message;
 
-$name = $_POST['name'];
-$email = $_POST['email'];
-$subject = $_POST['subject'];
-$message = $_POST['message'];
-$error = true;
-$errorMessage = 'Sorry your message can not be sent.';
+    $subject = 'Subject';
 
-//Validate first
-if(empty($name)||empty($email)||empty($message)) 
-{
-  echo "Name and email and message are required !";
-  header('Location: index.html');
-  $error = false;
-}
-//validate against any email injection attempts
-if(IsInjected($email))
-{
-  $error = false;
-  echo "Bad email value!";
-  header('Location: index.html');
-}
+    $headers = "From: You company <".$to.">". "\r\n" .
+                  "Return-Path: You company <korodarmo@gmail.com>\r\n".
+                  "Reply-To: You company <".$to.">" . "\r\n" .
+                  "MIME-Version: 1.0\r\n".
+                  "Content-type: text/html; charset=iso-8859-1\r\n".
+                  "X-Priority: 3\r\n" .
+                  'X-Mailer: PHP/' . phpversion();
 
-
-$mail->isSMTP();
-$mail->Host = 'ssl://smtp.gmail.com';
-$mail->SMTPAuth = true;
-$mail->Username = $user;
-$mail->Password = 'superuser';
-$mail->SMTPSecure = 'tls';
-$mail->Port = 465;
-$mail->setFrom($user, 'NATANAWA.WEB.ID');
-
-$msg =  " Name : $name <br>"; 
-$msg .= " Email: $email <br>";
-$msg .= " WebSite: $website <br>";
-$msg .= " Subject: $subject <br>";
-$msg .= " Message : ".stripslashes($_POST['message'])."<br>\n";
-$msg .= "User information <br>"; 
-$msg .= "User IP : ".$_SERVER["REMOTE_ADDR"]."<br>"; 
-$msg .= "Browser info : ".$_SERVER["HTTP_USER_AGENT"]."<br>"; 
-$msg .= "User come from : ".$_SERVER["SERVER_NAME"]."<br>";
-$msg .= "Template Name : SPLIT VCARD";
-
-$sujet =  "Sender information";
-
-if ($error){
-  $mail->addAddress('korodarmo@gmail.com');
-  $mail->Subject = $sujet;
-  $mail->isHTML(true);
-  $mail->Body = $msg;
-
-  if($mail->send()){
-    echo "SENDING"; 
-  } else {
-    echo $errorMessage; 
-  }
-} else {
-  echo $errorMessage; 
-}
-
-
-function IsInjected($str)
-{
-  $injections = array('(\n+)',
-    '(\r+)',
-    '(\t+)',
-    '(%0A+)',
-    '(%0D+)',
-    '(%08+)',
-    '(%09+)'
-  );
-  $inject = join('|', $injections);
-  $inject = "/$inject/i";
-  if(preg_match($inject,$str))
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && $status == "yes" ) { // shis line checks that we have a valid email address
+        mail($to, $subject, $message, $headers); // this method sends the mail.
+        echo "success"; // success message
+        exit;
+    }else{
+        echo "error"; //error
+    }
 
 ?>
