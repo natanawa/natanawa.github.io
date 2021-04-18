@@ -25,8 +25,7 @@ $(document).ready(function(){
                         1: 'navprofile',
                         2: 'navresume',
                         3: 'navportfolio',
-                        4: 'navblog',
-                        5: 'navcontact'
+                        4: 'navcontact'
                     },
                     itemClass: 'menuItem',
                     itemHover: 'active',
